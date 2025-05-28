@@ -4,8 +4,8 @@ import { colors } from "@/styles/colors"
 import { styles } from "./styles"
 
 type Props = PressableProps & {
-    name: string,
-    isSelected: boolean,
+    name: string
+    isSelected: boolean
     icon: keyof typeof MaterialIcons.glyphMap
 }
 
