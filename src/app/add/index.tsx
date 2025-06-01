@@ -7,7 +7,7 @@ import { Categories } from "@/components/categories"
 import { Input } from "@/components/input"
 import { Button } from "@/components/button"
 
-export default function Add(){
+export default function Add (){
     return(
         <View style={styles.container} >
             <View style={styles.header} >
@@ -24,7 +24,11 @@ export default function Add(){
 
             <View style={styles.form} >
 
-                <Input placeholder="Nome" />
+                <Input 
+                placeholder="Nome" 
+                onChangeText={console.log}
+                />
+
                 <Input placeholder="Url" />
 
                 <Button title="Adicionar" />
