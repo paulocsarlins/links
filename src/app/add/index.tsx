@@ -7,30 +7,44 @@ import { router } from "expo-router"
 import { Categories } from "@/components/categories"
 import { Input } from "@/components/input"
 import { Button } from "@/components/button"
+import { linkStorage } from "@/storage/link-storage"
 
-export default function Add (){
+export default function Add() {
 
     const [category, setCategory] = useState("")
     const [name, setName] = useState("")
     const [url, setUrl] = useState("")
 
-    function handleAdd() {
-        if(!category){
-            return Alert.alert("Categoria", "Selecione a categoria")
-        }
+    async function handleAdd() {
 
-        if(!name.trim()){
-            return Alert.alert("Nome", "Informe o nome")
-        }
+        try {
+            if (!category) {
+                return Alert.alert("Categoria", "Selecione a categoria")
+            }
 
-        if(!url.trim()){
-            return Alert.alert("URL", "Informe a URL")
-        }
+            if (!name.trim()) {
+                return Alert.alert("Nome", "Informe o nome")
+            }
 
-        console.log({ category, name, url })
+            if (!url.trim()) {
+                return Alert.alert("URL", "Informe a URL")
+            }
+
+            await linkStorage.save({
+                id: new Date().getTime.toString(),
+                name,
+                url,
+                category
+            })
+
+            console.log({ category, name, url })
+        } catch (error) {
+            Alert.alert("Erro", "Não foi possível salvar o link")
+            console.log(error)
+        }
     }
 
-    return(
+    return (
         <View style={styles.container} >
             <View style={styles.header} >
                 <TouchableOpacity onPress={() => router.back()} >
@@ -42,28 +56,29 @@ export default function Add (){
 
             <Text style={styles.label} >Selecione uma categoria</Text>
 
-            <Categories 
-            onChange={setCategory} 
-            selected={category} 
+            <Categories
+                onChange={setCategory}
+                selected={category}
             />
 
             <View style={styles.form} >
 
-                <Input 
-                placeholder="Nome" 
-                onChangeText={setName}
-                autoCorrect={false}
+                <Input
+                    placeholder="Nome"
+                    onChangeText={setName}
+                    autoCorrect={false}
                 />
 
-                <Input 
-                placeholder="URL" 
-                onChangeText={setUrl}
-                autoCorrect={false}
+                <Input
+                    placeholder="URL"
+                    onChangeText={setUrl}
+                    autoCorrect={false}
+                    autoCapitalize="none"
                 />
 
-                <Button 
-                title="Adicionar" 
-                onPress={handleAdd} 
+                <Button
+                    title="Adicionar"
+                    onPress={handleAdd}
                 />
 
             </View>
