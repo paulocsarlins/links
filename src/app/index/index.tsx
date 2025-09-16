@@ -27,14 +27,32 @@ export default function Index() {
             const filtered = response.filter((link) => link.category === category)
 
             setLinks(filtered)
-        } catch(error) {
+        } catch (error) {
             Alert.alert("Erro", "Não foi possível listar os links")
         }
     }
 
-    function handelDetails(selected: LinkStorage){
+    function handelDetails(selected: LinkStorage) {
         setShowModal(true)
         setLink(selected)
+    }
+
+    async function linkRemove() {
+        try {
+            await linkStorage.remove(link.id)
+            getLinks()
+            setShowModal(false)
+        } catch (error) {
+            Alert.alert("Erro", "Não foi possível excluir")
+            console.log(error)
+        }
+    }
+
+    function handleRemove() {
+        Alert.alert("Excluir", "Deseja realmente excluir?", [
+            { style: "cancel", text: "Não" },
+            { text: "Sim", onPress: linkRemove }
+        ])
     }
 
     useFocusEffect(useCallback(() => {
@@ -61,7 +79,7 @@ export default function Index() {
                     <Link
                         name={item.name}
                         url={item.url}
-                        onDetails={() =>handelDetails(item)}
+                        onDetails={() => handelDetails(item)}
                     />
                 )}
                 style={styles.links}
@@ -75,10 +93,10 @@ export default function Index() {
                         <View style={styles.modalHeader}>
                             <Text style={styles.modalCategory}>{link.category}</Text>
                             <TouchableOpacity onPress={() => setShowModal(false)} >
-                                <MaterialIcons 
-                                name="close" 
-                                size={20} 
-                                color={colors.gray[400]} />
+                                <MaterialIcons
+                                    name="close"
+                                    size={20}
+                                    color={colors.gray[400]} />
                             </TouchableOpacity>
                         </View>
 
@@ -87,12 +105,21 @@ export default function Index() {
                         </Text>
 
                         <Text style={styles.modalUrl} >
-                        {link.url}
+                            {link.url}
                         </Text>
 
                         <View style={styles.modalFooter} >
-                            <Option name="EXcluir" icon="delete" variant="secondary" />
-                            <Option name="Abrir" icon="language" />
+                            <Option 
+                            name="Excluir" 
+                            icon="delete" 
+                            variant="secondary" 
+                            onPress={handleRemove} 
+                            />
+
+                            <Option 
+                            name="Abrir" 
+                            icon="language" 
+                            />
                         </View>
 
                     </View>
