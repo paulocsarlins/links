@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react"
-import { View, Image, TouchableOpacity, FlatList, Modal, Text, Alert } from "react-native"
+import { View, Image, TouchableOpacity, FlatList, Modal, Text, Alert, Linking } from "react-native"
 import { styles } from "./styles"
 import { MaterialIcons } from "@expo/vector-icons"
 import { colors } from "@/styles/colors"
@@ -44,6 +44,16 @@ export default function Index() {
             setShowModal(false)
         } catch (error) {
             Alert.alert("Erro", "Não foi possível excluir")
+            console.log(error)
+        }
+    }
+
+    async function handleOpen(){
+        try {
+            await Linking.openURL(link.url)
+            setShowModal(false)
+        } catch (error) {
+            Alert.alert("Link", "Não foi possível abir o link")
             console.log(error)
         }
     }
@@ -119,6 +129,7 @@ export default function Index() {
                             <Option 
                             name="Abrir" 
                             icon="language" 
+                            onPress={handleOpen}
                             />
                         </View>
 
