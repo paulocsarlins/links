@@ -12,6 +12,10 @@ import { linkStorage, LinkStorage } from "@/storage/link-storage"
 
 export default function Index() {
 
+    const [showModal, setShowModal] = useState(false)
+
+    const [link, setLink] = useState<LinkStorage>({} as LinkStorage)
+
     const [links, setLinks] = useState<LinkStorage[]>([])
 
     const [category, setCategory] = useState(categories[0].name)
@@ -21,11 +25,16 @@ export default function Index() {
             const response = await linkStorage.get()
 
             const filtered = response.filter((link) => link.category === category)
-            
+
             setLinks(filtered)
         } catch(error) {
             Alert.alert("Erro", "Não foi possível listar os links")
         }
+    }
+
+    function handelDetails(selected: LinkStorage){
+        setShowModal(true)
+        setLink(selected)
     }
 
     useFocusEffect(useCallback(() => {
@@ -52,7 +61,7 @@ export default function Index() {
                     <Link
                         name={item.name}
                         url={item.url}
-                        onDetails={() => console.log("Clicou!")}
+                        onDetails={() =>handelDetails(item)}
                     />
                 )}
                 style={styles.links}
@@ -60,22 +69,25 @@ export default function Index() {
                 showsVerticalScrollIndicator={false}
             />
 
-            <Modal transparent visible={false}>
+            <Modal transparent visible={showModal} animationType="slide">
                 <View style={styles.modal}>
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalCategory}>Curso</Text>
-                            <TouchableOpacity>
-                                <MaterialIcons name="close" size={20} color={colors.gray[400]} />
+                            <Text style={styles.modalCategory}>{link.category}</Text>
+                            <TouchableOpacity onPress={() => setShowModal(false)} >
+                                <MaterialIcons 
+                                name="close" 
+                                size={20} 
+                                color={colors.gray[400]} />
                             </TouchableOpacity>
                         </View>
 
                         <Text style={styles.modalLinkName} >
-                            RocketSeat
+                            {link.name}
                         </Text>
 
                         <Text style={styles.modalUrl} >
-                        https://rocketseat.com.br
+                        {link.url}
                         </Text>
 
                         <View style={styles.modalFooter} >
