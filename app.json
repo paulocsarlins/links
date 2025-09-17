@@ -30,6 +30,10 @@
     "plugins": [
       "expo-router"
     ],
+    "entryPoint": "expo-router/entry",
+    "router": {
+      "root": "./src/app"
+    },
     "experiments": {
       "typedRoutes": true
     }

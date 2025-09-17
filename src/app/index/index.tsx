@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react"
 import { View, Image, TouchableOpacity, FlatList, Modal, Text, Alert, Linking } from "react-native"
 import { styles } from "./styles"
 import { MaterialIcons } from "@expo/vector-icons"
@@ -7,17 +6,15 @@ import { Categories } from "@/components/categories"
 import { Link } from "@/components/link"
 import { Option } from "@/components/option"
 import { router, useFocusEffect } from "expo-router"
+import { useCallback, useEffect, useState } from "react"
 import { categories } from "@/utils/categories"
-import { linkStorage, LinkStorage } from "@/storage/link-storage"
+import { LinkStorage, linkStorage } from "@/storage/link-storage"
 
 export default function Index() {
 
     const [showModal, setShowModal] = useState(false)
-
     const [link, setLink] = useState<LinkStorage>({} as LinkStorage)
-
     const [links, setLinks] = useState<LinkStorage[]>([])
-
     const [category, setCategory] = useState(categories[0].name)
 
     async function getLinks() {
